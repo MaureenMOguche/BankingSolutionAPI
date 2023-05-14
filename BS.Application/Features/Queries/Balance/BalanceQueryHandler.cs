@@ -23,15 +23,15 @@ namespace BS.Application.Features.Queries.Balance
             var account = await _db.BankAccountRepo.GetOneAsync(
                 x => x.BankUserId == request.userId);
 
-            if (account == null)
-            {
-                return new APIResponse
-                {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    isSuccess = false,
-                    Messages = new() { $"User does not exist" }
-                };
-            }
+            //if (account == null)
+            //{
+            //    return new APIResponse
+            //    {
+            //        StatusCode = HttpStatusCode.BadRequest,
+            //        isSuccess = false,
+            //        Messages = new() { $"User does not exist" }
+            //    };
+            //}
 
             return new APIResponse
             {

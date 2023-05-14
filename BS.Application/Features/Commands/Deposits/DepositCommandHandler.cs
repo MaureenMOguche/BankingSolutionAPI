@@ -4,6 +4,7 @@ using BS.Application.Models;
 using BS.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Net;
 
 
@@ -14,6 +15,8 @@ namespace BS.Application.Features.Commands.Deposits
     {
         private readonly IUnitOfWork _db;
         private readonly UserManager<BankUser> _userManager;
+        public static readonly HttpClient client = new();
+
 
         public DepositCommandHandler(IUnitOfWork db, UserManager<BankUser> userManager)
         {
@@ -39,6 +42,29 @@ namespace BS.Application.Features.Commands.Deposits
 
             var result = await _db.BankAccountRepo.Deposit(account, request.Request.Amount);
 
+
+            //Squadco payment gateway
+            try {
+                using HttpResponseMessage httpResponse = await client.GetAsync("https://sandbox-api-d.squadco.com/transaction/initiate");
+                httpResponse.EnsureSuccessStatusCode();
+                string responseBody = await httpResponse.Content.ReadAsStringAsync();
+
+                //return new APIResponse
+                //{
+                //    StatusCode = HttpStatusCode.OK,
+                //    isSuccess = true,
+                //    Messages = new() { $"{responseBody}" }
+                //};
+
+            }
+            catch(Exception ex)
+            {
+
+            };
+        
+
+
+
             if (result == TransferDepositMessages.ErrorInvalidAmount)
             {
                 var response = new APIResponse
@@ -58,6 +84,8 @@ namespace BS.Application.Features.Commands.Deposits
                 SenderId = account.Id,
                 ReceiverId = account.Id,
                 DateTime = DateTime.UtcNow,
+                SenderBalance = account.Balance,
+                ReceiverBalance = account.Balance,
             }; 
 
             await _db.TransactionRepo.CreateAsync(transaction);

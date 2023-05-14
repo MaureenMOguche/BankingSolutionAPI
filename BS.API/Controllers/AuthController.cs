@@ -1,4 +1,5 @@
-﻿using BS.Application.Contracts.Identity;
+﻿using Azure;
+using BS.Application.Contracts.Identity;
 using BS.Application.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,16 +18,71 @@ namespace BS.API.Controllers
         }
 
 
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status404NotFound)]
         [HttpPost("login")]
         public async Task<ActionResult<APIResponse>> Login(LoginRequest request)
         {
-            return await _authService.Login(request);
+            var response = await _authService.Login(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Ok(response);
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound(response);
+            }
+            return BadRequest(response);
         }
 
+
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status400BadRequest)]
         [HttpPost("register")]
         public async Task<ActionResult<APIResponse>> Register(RegistrationRequest request)
         {
-            return await _authService.Register(request);
+            var response = await _authService.Register(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status404NotFound)]
+        [HttpPost("verifyEmail")]
+        public async Task<ActionResult<APIResponse>> VerifyEmail(string code, string email)
+        {
+            var response = await _authService.VerifyEmail(code, email);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Ok(response);
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound(response);
+            }
+            return BadRequest(response);
+        }
+
+
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status404NotFound)]
+        [HttpPost("GenerateNewToken")]
+        public async Task<ActionResult<APIResponse>> GenerateNewToken(string email)
+        {
+            var response = await _authService.GenerateNewToken(email);
+            
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Ok(response);
+            }
+            return NotFound(response);
         }
     }
 }

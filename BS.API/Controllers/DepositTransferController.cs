@@ -22,26 +22,43 @@ namespace BS.API.Controllers
             this._mediator = mediator;
         }
 
-
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status400BadRequest)]
         [HttpPost("Transfer")]
         public async Task<ActionResult<APIResponse>> TransferFunds(TransferRequest request)
         {
             var user = User.Identity.Name;
-            return await _mediator.Send(new TransferCommand(request, user));
+            var response = await _mediator.Send(new TransferCommand(request, user));
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
+
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status400BadRequest)]
         [HttpPost("Deposit")]
         public async Task<ActionResult<APIResponse>> Deposit(DepositRequest request)
         {
             var user = User.Identity.Name;
-            return await _mediator.Send(new DepositCommand(request, user));
+            var response = await _mediator.Send(new DepositCommand(request, user));
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
+
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status200OK)]
         [HttpGet("Balance")]
         public async Task<ActionResult<APIResponse>> Balance()
         {
             var user = User.Identity.Name;
-            return await _mediator.Send(new BalanceQuery(user));
+            return Ok(await _mediator.Send(new BalanceQuery(user)));
         }
     }
 }

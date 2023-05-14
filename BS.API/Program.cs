@@ -1,11 +1,15 @@
 using BS.Application;
+using BS.Infrastructure;
+using BS.Infrastructure.EmailSender;
 using BS.Persistence;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 //builder.Services.AddIdentityServices(builder.Configuration);
 
 builder.Services.AddControllers();

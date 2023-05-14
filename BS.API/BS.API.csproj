@@ -17,7 +17,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BS.Application\BS.Application.csproj" />
+    <ProjectReference Include="..\BS.Infrastructure\BS.Infrastructure.csproj" />
     <ProjectReference Include="..\BS.Persistence\BS.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Uploads\ProfilePictures\" />
   </ItemGroup>
 
 </Project>

@@ -16,6 +16,9 @@ namespace BS.Domain
         public string? Description { get; set; }
         [Required]
         public decimal Amount { get; set; }
+        public decimal SenderBalance { get; set; }
+        public decimal ReceiverBalance { get; set; }
+
 
 
         //Relationships

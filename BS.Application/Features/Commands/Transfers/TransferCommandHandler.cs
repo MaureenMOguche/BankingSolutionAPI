@@ -68,6 +68,8 @@ namespace BS.Application.Features.Commands.Transfers
                     SenderId = senderAccount.Id,
                     ReceiverId = receiverAccount.Id,
                     Description = request.Request.Description,
+                    SenderBalance = senderAccount.Balance,
+                    ReceiverBalance = receiverAccount.Balance,
                 };
 
                 await _db.TransactionRepo.CreateAsync(transaction);

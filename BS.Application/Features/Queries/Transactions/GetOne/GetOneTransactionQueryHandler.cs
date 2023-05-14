@@ -27,7 +27,7 @@ namespace BS.Application.Features.Queries.Transactions.GetOne
             {
                 return new APIResponse
                 {
-                    StatusCode = HttpStatusCode.BadRequest,
+                    StatusCode = HttpStatusCode.NotFound,
                     isSuccess = false,
                     Messages = new() { $"User does not exist" }
                 };

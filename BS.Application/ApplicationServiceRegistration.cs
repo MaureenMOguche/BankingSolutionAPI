@@ -14,7 +14,7 @@ namespace BS.Application
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
+                 
             return services;
         }
     }

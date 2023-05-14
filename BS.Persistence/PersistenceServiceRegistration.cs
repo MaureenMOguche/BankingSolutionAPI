@@ -5,6 +5,7 @@ using BS.Domain;
 using BS.Persistence.Repository;
 using BS.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,14 +20,6 @@ namespace BS.Persistence
         public static IServiceCollection AddPersistenceServices(this  IServiceCollection services,
             IConfiguration configuration)
         {
-            //services.AddDbContext<BSDbContext>(options => options.UseSqlServer(
-            //    configuration.GetConnectionString("BSDbConnection")));
-
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            //return services;
-
-
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
             services.AddDbContext<BSDbContext>(options => options.UseSqlServer(
@@ -66,6 +59,13 @@ namespace BS.Persistence
 
                 };
             });
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("BankManager", new AuthorizationPolicy(
+                     
+            //        ));
+            //});
 
             return services;
 
